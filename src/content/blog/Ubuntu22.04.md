@@ -1,3 +1,10 @@
+---
+title: "Ubuntu 22.04 使用指南"
+description: "Ubuntu 22.04 系统配置、网络设置、Docker 安装等常用操作记录"
+publishDate: 2024-01-01
+tags: ["Linux", "Ubuntu", "Docker"]
+---
+
 # Ubuntu（22.04）
 
 ## 查看主机端口
