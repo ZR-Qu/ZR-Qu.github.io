@@ -11,11 +11,11 @@ import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import config from '@/site-config'
 
-const languages = ['C/C++', 'Python', 'Assembly', 'Shell', 'Java']
-const frontend = ['HTML', 'CSS', 'JavaScript', 'React', 'Vue']
-const backend = ['Node.js', 'Express', 'MongoDB', 'MySQL', 'Redis']
-const tools = ['IDA Pro', 'Gidra', 'OllyDbg', 'Wireshark', 'Burp Suite']
-const other = ['Linux', 'Docker', 'Git', 'Cryptography']
+const languages = ['C/C++', 'Python', 'Assembly', 'Shell']
+// const frontend = ['HTML', 'CSS', 'JavaScript', 'React', 'Vue']
+// const backend = ['Node.js', 'Express', 'MongoDB', 'MySQL', 'Redis']
+const tools = ['IDA Pro', 'OllyDbg', 'Wireshark', 'Burp Suite']
+const other = ['Linux', 'Docker', 'Git', 'pwn']
 
 const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
@@ -186,8 +186,8 @@ if (!images[imagePath])
 
       <Section title='Skills'>
         <SkillLayout title='Languages' skills={languages} />
-        <SkillLayout title='Frontend' skills={frontend} />
-        <SkillLayout title='Backend' skills={backend} />
+        <SkillLayout title='Frontend' skills={tools} />
+        <SkillLayout title='Backend' skills={other} />
       </Section>
     </div>
     <Quote class='mt-12' />
