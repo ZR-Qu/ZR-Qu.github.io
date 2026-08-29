@@ -3,6 +3,7 @@ title: "Ubuntu 22.04 使用指南"
 description: "Ubuntu 22.04 系统配置、网络设置、Docker 安装等常用操作记录"
 publishDate: 2024-01-01
 tags: ["Linux", "Ubuntu", "Docker"]
+language: "zh-CN"
 ---
 
 # Ubuntu（22.04）
@@ -58,7 +59,7 @@ reboot
 
 ​    进入该文件，你应该会找到一句被注释的语句
 
-```lasso
+```text
 #WaylandEnable=false
 ```
 
@@ -317,4 +318,3 @@ export https_proxy="http://127.0.0.1:7890"
 export http_proxy="http://127.0.0.1:10809"
 export https_proxy="http://127.0.0.1:10809"
 ```
-

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <clipPath id="avatar"><circle cx="245" cy="315" r="150" /></clipPath>
+  </defs>
+  <rect width="1200" height="630" fill="#edf5f7" />
+  <rect x="830" width="370" height="630" fill="#659eb9" opacity="0.16" />
+  <circle cx="245" cy="315" r="166" fill="#ffffff" />
+  <image href="/favicon/logo.jpg" x="95" y="165" width="300" height="300" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatar)" />
+  <text x="500" y="290" fill="#20313a" font-family="Satoshi, Arial, sans-serif" font-size="86" font-weight="600">ZR-Qu</text>
+  <text x="505" y="365" fill="#526873" font-family="Satoshi, Arial, sans-serif" font-size="30">Personal Homepage &amp; Blog</text>
+  <text x="505" y="415" fill="#526873" font-family="Satoshi, Arial, sans-serif" font-size="24">Systems Security · Trusted Computing · AI Systems</text>
+</svg>

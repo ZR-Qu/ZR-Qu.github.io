@@ -1,0 +1,184 @@
+---
+import config from 'virtual:config'
+
+import { Icon } from 'astro-pure/user'
+
+interface Props {
+  scrollBackground?: boolean
+}
+
+const { scrollBackground = false } = Astro.props
+---
+
+<header-component
+  data-scroll-background={scrollBackground ? 'true' : undefined}
+  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
+>
+  <a class='z-30 text-xl font-medium' href='/' aria-label='Brand'>{config.title}</a>
+
+  <div class='flex items-center gap-x-2'>
+    <div
+      id='headerExpandContent'
+      class='end-0 start-0 top-12 grid border border-transparent group-[.expanded]:opacity-100 max-sm:absolute max-sm:opacity-0 sm:grid-rows-1'
+    >
+      <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
+        {
+          config.header.menu.map((item) => (
+            <a
+              href={item.link}
+              class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
+              aria-label='Nav menu item'
+            >
+              {item.title}
+            </a>
+          ))
+        }
+        <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
+          <a class='px-1 py-2 transition-none sm:px-2' href='/search' title='Search'>
+            <span class='sr-only'>Search</span>
+            <Icon name='search' class='size-5' />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class='z-30 flex gap-x-4'>
+      <button
+        id='toggleDarkMode'
+        class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border'
+      >
+        <span class='sr-only'>Dark Theme</span>
+        <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
+        <Icon class='light hidden size-5 group-hover/dark:text-primary' name='sun' />
+        <Icon class='dark hidden size-5 group-hover/dark:text-primary' name='moon' />
+      </button>
+      <button
+        id='toggleMenu'
+        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden'
+      >
+        <span class='sr-only'>Menu</span>
+        <Icon class='size-5' name='menu' />
+      </button>
+    </div>
+  </div>
+</header-component>
+
+<script is:inline>
+  const toggleDarkModeElement = document.getElementById('toggleDarkMode')
+  if (toggleDarkModeElement) {
+    toggleDarkModeElement.dataset.theme = localStorage.getItem('theme') || 'system'
+  }
+</script>
+
+<script>
+  import { setTheme, showToast } from 'astro-pure/utils'
+
+  class HeaderComponent extends HTMLElement {
+    connectedCallback() {
+      const darkModeBtn = this.querySelector('#toggleDarkMode') as HTMLElement
+      darkModeBtn.addEventListener('click', () => {
+        const newTheme = setTheme(undefined, true)
+        darkModeBtn.dataset.theme = newTheme
+        showToast({ message: `Set theme to ${newTheme}` })
+      })
+
+      this.querySelector('#toggleMenu')?.addEventListener('click', () => {
+        this.classList.toggle('expanded')
+      })
+
+      if (this.dataset.scrollBackground === 'true') {
+        let frame = 0
+
+        const updateProgress = () => {
+          const viewportHeight = Math.max(window.innerHeight, 1)
+          const progress = Math.min(Math.max(window.scrollY / viewportHeight, 0), 1)
+          this.style.setProperty('--header-scroll-progress', progress.toFixed(4))
+        }
+
+        const scheduleProgressUpdate = () => {
+          if (frame) return
+          frame = requestAnimationFrame(() => {
+            frame = 0
+            updateProgress()
+          })
+        }
+
+        updateProgress()
+        window.addEventListener('scroll', scheduleProgressUpdate, { passive: true })
+        window.addEventListener('resize', scheduleProgressUpdate)
+        window.addEventListener('pageshow', scheduleProgressUpdate)
+      }
+    }
+  }
+
+  customElements.define('header-component', HeaderComponent)
+</script>
+
+  <style>
+  header-component {
+    isolation: isolate;
+  }
+
+  header-component::before {
+    box-sizing: content-box;
+    content: '';
+    position: absolute;
+    top: calc(-1rem - env(safe-area-inset-top));
+    bottom: -0.5rem;
+    left: 50%;
+    z-index: -1;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: var(--header-background, hsl(var(--background)));
+    background-position: center calc(var(--header-scroll-progress, 0) * -100vh);
+    background-repeat: no-repeat;
+    background-size: 100vw 100vh;
+  }
+
+  @media (max-width: 640px) {
+    #headerExpandContent {
+      grid-template-rows: 0fr;
+      transition:
+        opacity 0.3s,
+        grid-template-rows 0.3s;
+    }
+    .expanded #headerExpandContent {
+      grid-template-rows: 1fr;
+    }
+    header-component #headerExpandContent::after {
+      box-sizing: content-box;
+      content: '';
+      position: absolute;
+      inset-inline: calc(-1rem - 1px);
+      bottom: -0.5rem;
+      top: calc(-4rem - env(safe-area-inset-top));
+      z-index: -1;
+      visibility: visible;
+      opacity: 1;
+      background: var(--header-background, hsl(var(--background)));
+      background-position: center calc(var(--header-scroll-progress, 0) * -100vh);
+      background-repeat: no-repeat;
+      background-size: 100vw 100vh;
+    }
+  }
+
+  #toggleDarkMode {
+    &[data-theme='dark'] {
+      & .system {
+        display: none;
+      }
+      & .dark {
+        display: block;
+      }
+    }
+    &[data-theme='light'] {
+      & .system {
+        display: none;
+      }
+      .light {
+        display: block;
+      }
+    }
+  }
+</style>
